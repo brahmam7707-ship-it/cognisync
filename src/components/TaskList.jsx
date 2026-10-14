@@ -20,7 +20,7 @@ export default function TaskList({
   onDeleteTask,
   onAddNewTask
 }) {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
   const [filter, setFilter] = useState('all'); // 'all' | 'active' | 'completed'
   const [search, setSearch] = useState('');
 
@@ -52,29 +52,28 @@ export default function TaskList({
   });
 
   return (
-    <div className="bg-white rounded-2xl border border-paper-300 shadow-xs overflow-hidden">
+    <div className="bg-white rounded-2xl border border-paper-300 shadow-sm overflow-hidden card-enter">
       {/* Collapsible Section Header */}
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full px-5 py-4 flex items-center justify-between text-left hover:bg-paper-50 transition"
+        className="w-full px-5 py-4 flex items-center justify-between text-left hover:bg-paper-50 transition border-b border-paper-200"
       >
         <div className="flex items-center gap-2.5">
-          <span className="text-sm font-bold text-charcoal-900">
-            View All Tasks
+          <span className="text-sm font-bold text-charcoal-900">All Tasks</span>
+          <span className="inline-flex items-center justify-center min-w-[22px] h-5 px-1.5 rounded-full bg-accent-100 text-accent-700 text-[10px] font-bold">
+            {tasks.filter(t => !t.completed).length}
           </span>
           <span className="text-xs text-charcoal-400 font-medium">
             ({completedCount}/{tasks.length} done)
           </span>
         </div>
-
         <div className="flex items-center gap-2 text-charcoal-400">
-          <span className="text-xs font-medium">
-            {isOpen ? 'Hide' : 'Show'}
-          </span>
+          <span className="text-xs font-medium">{isOpen ? 'Hide' : 'Show'}</span>
           {isOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
         </div>
       </button>
+
 
       {/* Collapsible Content */}
       {isOpen && (

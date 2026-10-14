@@ -5,39 +5,44 @@ const ENERGY_OPTIONS = [
   {
     key: 'Low',
     label: 'Low Energy',
-    hint: 'Quick wins & restorative tasks',
+    hint: 'Quick wins & light tasks',
     icon: BatteryLow,
-    activeClass: 'bg-emerald-50 border-emerald-300 text-emerald-900 font-semibold shadow-xs'
+    activeClass: 'bg-emerald-500 border-emerald-500 text-white shadow-md shadow-emerald-200',
+    inactiveIcon: 'text-emerald-600',
   },
   {
     key: 'Medium',
     label: 'Medium Energy',
-    hint: 'Steady flow & routine execution',
+    hint: 'Steady flow & routines',
     icon: BatteryMedium,
-    activeClass: 'bg-amber-50 border-amber-300 text-amber-900 font-semibold shadow-xs'
+    activeClass: 'bg-amber-500 border-amber-500 text-white shadow-md shadow-amber-200',
+    inactiveIcon: 'text-amber-600',
   },
   {
     key: 'High',
     label: 'High Energy',
-    hint: 'Peak deep focus & architecture',
+    hint: 'Peak focus & deep work',
     icon: BatteryCharging,
-    activeClass: 'bg-accent-50 border-accent-300 text-accent-900 font-semibold shadow-xs'
-  }
+    activeClass: 'bg-accent-600 border-accent-600 text-white shadow-md shadow-accent-200',
+    inactiveIcon: 'text-accent-600',
+  },
 ];
 
 export default function EnergySelector({ currentEnergy, onEnergyChange }) {
+  const current = ENERGY_OPTIONS.find(o => o.key === currentEnergy);
+
   return (
-    <div className="bg-white rounded-2xl p-4 border border-paper-300 shadow-xs">
-      <div className="flex items-center justify-between mb-2.5">
-        <span className="text-xs font-semibold text-charcoal-600 uppercase tracking-wider">
-          Current Energy Level
+    <div className="bg-white rounded-2xl p-4 border border-paper-300 shadow-sm card-enter">
+      <div className="flex items-center justify-between mb-3">
+        <span className="text-xs font-bold text-charcoal-700 uppercase tracking-widest">
+          How's Your Energy Right Now?
         </span>
-        <span className="text-xs text-charcoal-400">
-          {ENERGY_OPTIONS.find(o => o.key === currentEnergy)?.hint}
-        </span>
+        {current && (
+          <span className="text-[11px] text-charcoal-400 italic">{current.hint}</span>
+        )}
       </div>
 
-      <div className="grid grid-cols-3 gap-2">
+      <div className="grid grid-cols-3 gap-2.5">
         {ENERGY_OPTIONS.map(opt => {
           const isSelected = currentEnergy === opt.key;
           const Icon = opt.icon;
@@ -47,14 +52,19 @@ export default function EnergySelector({ currentEnergy, onEnergyChange }) {
               key={opt.key}
               type="button"
               onClick={() => onEnergyChange(opt.key)}
-              className={`flex items-center justify-center gap-2 py-2 px-3 rounded-xl border text-xs transition-all ${
+              className={`relative flex flex-col items-center justify-center gap-1.5 py-3 px-2 rounded-xl border-2 text-xs font-bold transition-all duration-200 active:scale-95 ${
                 isSelected
                   ? opt.activeClass
-                  : 'bg-paper-50/70 border-paper-300 text-charcoal-600 hover:bg-paper-100 hover:text-charcoal-900'
+                  : 'bg-paper-50 border-paper-300 text-charcoal-600 hover:border-charcoal-200 hover:bg-paper-100'
               }`}
             >
-              <Icon className="w-4 h-4 shrink-0" />
-              <span>{opt.label}</span>
+              <Icon className={`w-5 h-5 ${isSelected ? 'text-white' : opt.inactiveIcon}`} />
+              <span className="leading-none">{opt.key}</span>
+              {isSelected && (
+                <span className="absolute -top-1.5 -right-1.5 w-3.5 h-3.5 rounded-full bg-white border-2 border-current flex items-center justify-center">
+                  <span className="w-1.5 h-1.5 rounded-full bg-current block" />
+                </span>
+              )}
             </button>
           );
         })}
